@@ -96,3 +96,114 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+# Notification Backend
+
+This project is a backend service built with [NestJS](https://nestjs.com/) for asynchronous notification processing using RabbitMQ and WebSockets.
+
+## Features
+
+- REST API for sending messages and checking status.
+- Asynchronous message processing via RabbitMQ.
+- Real-time status notifications via WebSocket.
+- Data validation with `class-validator`.
+
+## Technologies Used
+
+- [NestJS](https://nestjs.com/)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- [Socket.IO](https://socket.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Docker](https://www.docker.com/)
+
+## Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd notificacao-backend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   - Copy `.env.example` to `.env` and fill in the required values.
+
+4. **Start with Docker (optional):**
+   ```bash
+   docker-compose up
+   ```
+
+## Usage
+
+### Development
+
+```bash
+npm run start:dev
+```
+
+### Production
+
+```bash
+npm run build
+npm run start:prod
+```
+
+### Testing
+
+```bash
+npm run test
+```
+
+## Endpoints
+
+- `POST /api/messages`  
+  Sends a new message for processing.
+  ```json
+  {
+    "messageId": "uuid",
+    "messageContent": "your message text"
+  }
+  ```
+
+- `GET /api/messages/status/:id`  
+  Checks the processing status of a message.
+
+## WebSocket
+
+- Connect to `ws://localhost:3000` to receive real-time status updates on the `statusUpdate` event.
+
+## Environment Variables
+
+See the [.env.example](.env.example) file for required parameters:
+
+- `RABBITMQ_USER`
+- `RABBITMQ_PASS`
+- `RABBITMQ_URL`
+- `INPUT_QUEUE`
+- `STATUS_QUEUE`
+
+## Project Structure
+
+```
+src/
+  app.module.ts
+  main.ts
+  dto/
+    create-message.dto.ts
+  message/
+    message.controller.ts
+    message.gateway.ts
+    message.module.ts
+    message.service.ts
+  rabbitmq/
+    rabbitmq.module.ts
+    rabbitmq.service.ts
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
