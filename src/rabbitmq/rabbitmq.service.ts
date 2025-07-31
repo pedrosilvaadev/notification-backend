@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Channel, connect, ChannelModel } from 'amqplib';
+import { MessageGateway } from 'src/message/message.gateway';
 
 @Injectable()
 export class RabbitMQService implements OnModuleInit {
@@ -13,7 +14,10 @@ export class RabbitMQService implements OnModuleInit {
   private statusQueue: string;
   private rabbitUrl: string;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private messageGateway: MessageGateway,
+  ) {
     this.rabbitUrl = this.configService.getOrThrow<string>('RABBITMQ_URL');
     this.inputQueue = this.configService.getOrThrow<string>('INPUT_QUEUE');
     this.statusQueue = this.configService.getOrThrow<string>('STATUS_QUEUE');
@@ -52,6 +56,8 @@ export class RabbitMQService implements OnModuleInit {
 
         const response = JSON.stringify({ messageId, status });
         this.channel.sendToQueue(this.statusQueue, Buffer.from(response));
+
+        this.messageGateway.notifyStatusUpdate(messageId, status);
 
         this.channel.ack(msg);
       }
