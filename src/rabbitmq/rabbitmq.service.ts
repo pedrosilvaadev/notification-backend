@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Channel, connect, ChannelModel } from 'amqplib';
-import { MessageGateway } from 'src/message/message.gateway';
+import { MessageGateway } from '../message/message.gateway';
 
 @Injectable()
 export class RabbitMQService implements OnModuleInit {
